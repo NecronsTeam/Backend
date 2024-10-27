@@ -1,22 +1,12 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
 using CrmBackend.Database;
 using CrmBackend.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.Development.json");
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<DatabaseContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -26,21 +16,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             // указывает, будет ли валидироваться издатель при валидации токена
-            ValidateIssuer = true,
-            // строка, представляющая издателя
-            ValidIssuer = authOptions.Audience,
+            ValidateIssuer = false,
             // будет ли валидироваться потребитель токена
-            ValidateAudience = true,
-            // установка потребителя токена
-            ValidAudience = authOptions.Audience,
+            ValidateAudience = false,
             // будет ли валидироваться время существования
-            ValidateLifetime = true,
+            ValidateLifetime = false,
             // установка ключа безопасности
             IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
             // валидация ключа безопасности
             ValidateIssuerSigningKey = true,
         };
-});
+    });
 builder.Services.AddAuthorization();
 
 builder.Services.AddSwaggerGen(opt =>
@@ -66,12 +52,21 @@ builder.Services.AddSwaggerGen(opt =>
                     Id="Bearer"
                 }
             },
-            new string[]{}
+            Array.Empty<string>()
         }
     });
 });
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<DatabaseContext>();
+
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -83,9 +78,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.Map("/data", [Authorize] () => new { message = "Hello World!" });
 
 app.Run();
