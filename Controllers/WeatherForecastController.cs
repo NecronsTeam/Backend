@@ -1,5 +1,6 @@
 using CrmBackend.Database;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrmBackend.Controllers
@@ -25,6 +26,14 @@ namespace CrmBackend.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet]
+        [Route("authorized/endpoint")]
+        [Authorize]
+        public int GetCount()
+        {
+            return 0;
         }
     }
 }
