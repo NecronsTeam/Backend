@@ -15,15 +15,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // указывает, будет ли валидироваться издатель при валидации токена
             ValidateIssuer = false,
-            // будет ли валидироваться потребитель токена
+            ValidIssuer = authOptions.Issuer,
+
             ValidateAudience = false,
-            // будет ли валидироваться время существования
-            ValidateLifetime = false,
-            // установка ключа безопасности
+            ValidAudience = authOptions.Audience,
+
+            ValidateLifetime = true,
+
             IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
-            // валидация ключа безопасности
             ValidateIssuerSigningKey = true,
         };
     });
