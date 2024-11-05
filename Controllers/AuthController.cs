@@ -6,6 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using CrmBackend.Repositories;
 using CrmBackend.Services;
+using CrmBackend.Dtos;
+using CrmBackend.Models;
+using CrmBackend.Enums;
 
 namespace CrmBackend.Controllers;
 
@@ -14,24 +17,60 @@ namespace CrmBackend.Controllers;
 public class AuthController(IConfiguration _configuration, UserRepository userRepository, PasswordHelperService passwordService)
 {
     [HttpPost]
-    [Route("login")]
-    public async Task<string> Login(string username)
+    [Route("register")]
+    public async Task RegisterAsync(UserLoginDto dto)
     {
-        var users = await userRepository.GetAllEntitiesAsync();
-        var hash = await passwordService.AddHashedPasswordToDatabaseAsync("password");
-        var claims = new List<Claim> { new(ClaimTypes.Name, username), new(ClaimTypes.Role, "Some_role") };
-        // создаем JWT-токен
-        var authOptions = new AuthOptions(_configuration);
+        var isEmailUsed = await userRepository.IsEmailAlreadyUsedAsync(dto.Email);
+        if (isEmailUsed)
+            throw new BadHttpRequestException("Этот пароль уже использован");
+        
+        var hashOfPassword = await passwordService.AddHashedPasswordToDatabaseAsync(dto.Password);
 
-        var jwt = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
-                signingCredentials: new SigningCredentials(authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+        var user = new User() { Email = dto.Email, HashedPassword = hashOfPassword, Roles = [RolesEnum.Student] };
+        await userRepository.CreateEntityAsync(user);
+    }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<string> LoginAsync(UserLoginDto dto)
+    {
+        var user = await userRepository.GetUserByEmailAsync(dto.Email) ?? throw new BadHttpRequestException("Не найден пользователь с таким email");
+        var isPasswordCorrect = await passwordService.IsPasswordCorrectAsync(user.HashedPassword, dto.Password);
+        if (!isPasswordCorrect)
+            throw new BadHttpRequestException("Неправильный пароль");
+
+        var claims = GetFilledClaims(user);
+        var jwt = CreateJwtToken(claims);
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    [Authorize]
+    private static List<Claim> GetFilledClaims(User user)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.PrimarySid, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email),
+        };
+
+        foreach (var role in user.Roles)
+            claims.Add(item: new Claim(ClaimTypes.Role, role.ToString()));
+
+        return claims;
+    }
+
+    private JwtSecurityToken CreateJwtToken(List<Claim> claims)
+    {
+        var authOptions = new AuthOptions(_configuration);
+
+        return new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+                signingCredentials: new SigningCredentials(authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+        );
+    }
+
+    [Authorize(Roles = "Student")]
     [HttpGet]
     [Route("test")]
     public string Test()

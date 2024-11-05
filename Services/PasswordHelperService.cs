@@ -22,19 +22,18 @@ public class PasswordHelperService(EncryptionService encryptionService, Password
         var cryptedPassword = encryptionService.EncryptString(password);
 
         var passwordModel = new Password() { HashedPassword = hashedPassword, CryptedPassword = cryptedPassword };
-        await passwordRepository.AddPassword(passwordModel);
+        await passwordRepository.AddPasswordAsync(passwordModel);
 
         return hashedPassword;
     }
 
-    public async Task<bool> IsPasswordCorrectAsync(User user, UserLoginDto userLoginInfo)
+    public async Task<bool> IsPasswordCorrectAsync(string hash, string password)
     {
-        var passwordHash = GetPasswordHash(userLoginInfo.Password);
-        var passwordFromDatabaseObject = await passwordRepository.GetByHash(passwordHash);
-        if (passwordFromDatabaseObject is null)
+        var passwordFromDb = await passwordRepository.GetByHashAsync(hash);
+        if (passwordFromDb is null)
             return false;
 
-        var decryptedPassword = encryptionService.DecryptString(passwordFromDatabaseObject.CryptedPassword);
-        return userLoginInfo.Password == decryptedPassword;
+        var decryptedPassword = encryptionService.DecryptString(passwordFromDb.CryptedPassword);
+        return password == decryptedPassword;
     }
 }

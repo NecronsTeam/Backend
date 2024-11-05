@@ -7,20 +7,20 @@ namespace CrmBackend.Repositories;
 
 public class PasswordRepository(DatabaseContext database)
 {
-    public async Task<Password?> GetByHash(string hash)
+    public async Task<Password?> GetByHashAsync(string hash)
     {
         return await database.Passwords.Where(p => p.HashedPassword == hash).FirstOrDefaultAsync();
     }
 
-    public async Task AddPassword(Password newPassword)
+    public async Task AddPasswordAsync(Password newPassword)
     {
         await database.Passwords.AddAsync(newPassword);
         await database.SaveChangesAsync();
     }
 
-    public async Task DeleteByHash(string hash)
+    public async Task DeleteByHashAsync(string hash)
     {
-        var password = await GetByHash(hash);
+        var password = await GetByHashAsync(hash);
         if (password is not null)
         {
             database.Passwords.Remove(password);
