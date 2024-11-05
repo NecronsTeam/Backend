@@ -1,6 +1,9 @@
 using CrmBackend.Database;
 using CrmBackend.Options;
+using CrmBackend.Repositories;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -72,7 +75,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<PasswordRepository>();
+
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql().UseLazyLoadingProxies());
 
 var app = builder.Build();
 

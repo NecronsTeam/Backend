@@ -4,18 +4,20 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
+using CrmBackend.Repositories;
 
 namespace CrmBackend.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(IConfiguration _configuration)
+public class AuthController(IConfiguration _configuration, UserRepository userRepository, PasswordRepository passwordRepository)
 {
     [HttpPost]
     [Route("login")]
-    public string Login(string username)
+    public async Task<string> Login(string username)
     {
+        var users = await userRepository.GetAllEntitiesAsync();
+        var passwords = await passwordRepository.GetByHash("");
         var claims = new List<Claim> { new(ClaimTypes.Name, username), new(ClaimTypes.Role, "Some_role") };
         // создаем JWT-токен
         var authOptions = new AuthOptions(_configuration);
