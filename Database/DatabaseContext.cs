@@ -17,7 +17,7 @@ public class DatabaseContext : DbContext
     {
         Config = config;
 
-        Database.EnsureCreated();
+        Database.Migrate();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
