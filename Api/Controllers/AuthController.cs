@@ -13,7 +13,7 @@ namespace CrmBackend.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(IConfiguration _configuration, UserRepository userRepository, PasswordHelperService passwordService)
+public class AuthController(IConfiguration _configuration, UserRepository userRepository, PasswordHelperService passwordService) : Controller
 {
     [HttpPost]
     [Route("register")]

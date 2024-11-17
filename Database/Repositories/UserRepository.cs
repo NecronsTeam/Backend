@@ -15,4 +15,10 @@ public class UserRepository(DatabaseContext database) : BaseRepository<User>(dat
     {
         return await database.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+
+    public async Task AddAccountToUserEntity(User user, Account account)
+    {
+        user.Account = account;
+        await database.SaveChangesAsync();
+    }
 }

@@ -1,3 +1,5 @@
+using System.Reflection;
+
 using CrmBackend.Api.Dtos;
 using CrmBackend.Api.Services;
 using CrmBackend.Database;
@@ -76,8 +78,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 builder.Services.AddTransient<UserRepository>();
 builder.Services.AddTransient<PasswordRepository>();
+builder.Services.AddTransient<AccountRepository>();
 
 builder.Services.AddTransient<PasswordHelperService>();
 builder.Services.AddTransient<EncryptionService>();
