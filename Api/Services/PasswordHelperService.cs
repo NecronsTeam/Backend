@@ -1,11 +1,9 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using CrmBackend.Database.Models;
+using CrmBackend.Database.Repositories;
 
-using CrmBackend.Dtos;
-using CrmBackend.Models;
-using CrmBackend.Repositories;
-
-namespace CrmBackend.Services;
+namespace CrmBackend.Api.Services;
 
 public class PasswordHelperService(EncryptionService encryptionService, PasswordRepository passwordRepository)
 {

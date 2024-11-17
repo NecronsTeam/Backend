@@ -1,7 +1,7 @@
-﻿using CrmBackend.Dtos;
-using CrmBackend.Models;
+﻿using CrmBackend.Api.Dtos;
+using CrmBackend.Database.Models;
 
-namespace CrmBackend.Abstractions;
+namespace CrmBackend.Database.Repositories.Abstractions;
 
 public interface IBaseRepository<T>
     where T : BaseModel

@@ -1,5 +1,4 @@
-﻿using CrmBackend.Models;
-
+﻿using CrmBackend.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrmBackend.Database;

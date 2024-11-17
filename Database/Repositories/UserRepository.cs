@@ -1,9 +1,8 @@
 ﻿using CrmBackend.Database;
-using CrmBackend.Models;
-
+using CrmBackend.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrmBackend.Repositories;
+namespace CrmBackend.Database.Repositories;
 
 public class UserRepository(DatabaseContext database) : BaseRepository<User>(database)
 {

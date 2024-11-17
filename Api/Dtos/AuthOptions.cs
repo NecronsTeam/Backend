@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace CrmBackend.Options;
+namespace CrmBackend.Api.Dtos;
 
 public class AuthOptions(IConfiguration configuration)
 {

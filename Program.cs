@@ -1,7 +1,7 @@
+using CrmBackend.Api.Dtos;
+using CrmBackend.Api.Services;
 using CrmBackend.Database;
-using CrmBackend.Options;
-using CrmBackend.Repositories;
-using CrmBackend.Services;
+using CrmBackend.Database.Repositories;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

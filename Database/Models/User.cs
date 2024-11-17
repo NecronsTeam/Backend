@@ -1,6 +1,6 @@
-﻿using CrmBackend.Enums;
+﻿using CrmBackend.Database.Enums;
 
-namespace CrmBackend.Models;
+namespace CrmBackend.Database.Models;
 
 public class User : BaseModel
 {

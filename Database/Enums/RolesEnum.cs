@@ -1,4 +1,4 @@
-﻿namespace CrmBackend.Enums;
+﻿namespace CrmBackend.Database.Enums;
 
 public enum RolesEnum
 {

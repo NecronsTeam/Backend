@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace CrmBackend.Services;
+namespace CrmBackend.Api.Services;
 
 public class EncryptionService(IConfiguration configuration)
 {

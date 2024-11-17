@@ -1,10 +1,10 @@
-﻿using CrmBackend.Abstractions;
+﻿using CrmBackend.Api.Dtos;
 using CrmBackend.Database;
-using CrmBackend.Dtos;
-using CrmBackend.Models;
+using CrmBackend.Database.Models;
+using CrmBackend.Database.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrmBackend.Repositories;
+namespace CrmBackend.Database.Repositories;
 
 public abstract class BaseRepository<T> : IBaseRepository<T>
     where T : BaseModel

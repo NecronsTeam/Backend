@@ -1,3 +1,3 @@
-﻿namespace CrmBackend.Dtos;
+﻿namespace CrmBackend.Api.Dtos;
 
 public record UserLoginDto(string Email, string Password);

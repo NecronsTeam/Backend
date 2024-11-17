@@ -1,6 +1,6 @@
-﻿using CrmBackend.Models;
+﻿using CrmBackend.Database.Models;
 
-namespace CrmBackend.Dtos;
+namespace CrmBackend.Api.Dtos;
 
 public abstract class BaseUpdateDto<TModel>
     where TModel : BaseModel

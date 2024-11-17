@@ -1,16 +1,15 @@
-﻿using CrmBackend.Options;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
-using CrmBackend.Repositories;
-using CrmBackend.Services;
-using CrmBackend.Dtos;
-using CrmBackend.Models;
-using CrmBackend.Enums;
+using CrmBackend.Database.Models;
+using CrmBackend.Database.Repositories;
+using CrmBackend.Api.Dtos;
+using CrmBackend.Api.Services;
+using CrmBackend.Database.Enums;
 
-namespace CrmBackend.Controllers;
+namespace CrmBackend.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
@@ -23,7 +22,7 @@ public class AuthController(IConfiguration _configuration, UserRepository userRe
         var isEmailUsed = await userRepository.IsEmailAlreadyUsedAsync(dto.Email);
         if (isEmailUsed)
             throw new BadHttpRequestException("Этот пароль уже использован");
-        
+
         var hashOfPassword = await passwordService.AddHashedPasswordToDatabaseAsync(dto.Password);
 
         var user = new User() { Email = dto.Email, HashedPassword = hashOfPassword, Roles = [RolesEnum.Student] };

@@ -1,4 +1,4 @@
-﻿namespace CrmBackend.Models;
+﻿namespace CrmBackend.Database.Models;
 
 public abstract class BaseModel
 {
