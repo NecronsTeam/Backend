@@ -11,5 +11,8 @@ public class AppMappingProfile : Profile
     {
         CreateMap<Account, OneAccountDto>();
         CreateMap<CreateAccountDto, Account>();
+
+        CreateMap<Activity, OneActivityDto>();
+        CreateMap<CreateActivityDto, Activity>();
     }
 }

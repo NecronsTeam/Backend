@@ -15,7 +15,7 @@ public class Activity : BaseModel
 
     [ForeignKey("PreviewPhotoId")]
     public virtual Photo? PreviewPhoto { get; set; }
-    public int PreviewPhotoId { get; set; }
+    public int? PreviewPhotoId { get; set; }
 
     public virtual ICollection<Photo> Photos { get; set; } = [];
 }

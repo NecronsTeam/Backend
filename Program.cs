@@ -83,6 +83,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient<UserRepository>();
 builder.Services.AddTransient<PasswordRepository>();
 builder.Services.AddTransient<AccountRepository>();
+builder.Services.AddTransient<ActivityRepository>();
 
 builder.Services.AddTransient<PasswordHelperService>();
 builder.Services.AddTransient<EncryptionService>();
