@@ -54,4 +54,25 @@ public class ActivityController(IMapper mapper, ActivityRepository activityRepos
 
         return new ListOfActivitiesDto(activitiesFromDb.Select(mapper.Map<OneActivityDto>).ToList());
     }
+
+    [HttpPost]
+    [Route("test")]
+    public async Task AddTestToAcitivityAsync(TestDto addTestDto)
+    {
+        _ = await activityRepository.GetEntityByIdAsync(addTestDto.ActivityId) 
+            ?? throw new BadHttpRequestException("Мероприятия с таким идентификатором не существует");
+
+        if (addTestDto.MaxScore <= 0)
+            throw new BadHttpRequestException("Максимальный балл теста не может быть меньше или равен нулю");
+
+        await activityRepository.AddTestToActivityAsync(addTestDto.ActivityId, addTestDto.Link, addTestDto.MaxScore);
+    }
+
+    [HttpGet]
+    [Route("test/{activityId}")]
+    public async Task<TestDto?> GetActivityTestAsync(int activityId)
+    {
+        var activityTest = await activityRepository.GetActivityTestAsync(activityId);
+        return mapper.Map<TestDto?>(activityTest);
+    }
 }

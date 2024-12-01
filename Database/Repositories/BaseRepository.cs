@@ -26,11 +26,15 @@ public abstract class BaseRepository<T> : IBaseRepository<T>
         return entity.Id;
     }
 
-    public virtual async Task<int> DeleteEntityByIdAsync(int id)
+    public virtual async Task DeleteEntityByIdAsync(int id)
     {
-        table.Remove(await GetEntityByIdAsync(id));
-        await _database.SaveChangesAsync();
-        return 0;
+        var entity = await GetEntityByIdAsync(id);
+
+        if (entity is not null)
+        {
+            table.Remove(entity);
+            await _database.SaveChangesAsync();
+        }
     }
 
     public virtual async Task<List<T>> GetAllEntitiesAsync()
@@ -38,16 +42,19 @@ public abstract class BaseRepository<T> : IBaseRepository<T>
         return await table.ToListAsync();
     }
 
-    public virtual async Task<T> GetEntityByIdAsync(int id)
+    public virtual async Task<T?> GetEntityByIdAsync(int id)
     {
         return await table.FindAsync(id);
     }
 
-    public virtual async Task<int> UpdateEntityAsync(int id, BaseUpdateDto<T> updateDto)
+    public virtual async Task UpdateEntityAsync(int id, BaseUpdateDto<T> updateDto)
     {
         var entity = await GetEntityByIdAsync(id);
-        updateDto.UpdateEntity(entity);
-        await _database.SaveChangesAsync();
-        return id;
+
+        if (entity is not null)
+        {
+            updateDto.UpdateEntity(entity);
+            await _database.SaveChangesAsync();
+        }
     }
 }

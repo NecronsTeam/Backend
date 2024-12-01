@@ -20,3 +20,9 @@ public record CreateActivityDto(
     DateTime? DateFrom,
     DateTime? DateTo
 );
+
+public record TestDto(
+    int ActivityId,
+    string Link,
+    double MaxScore
+);

@@ -14,5 +14,7 @@ public class AppMappingProfile : Profile
 
         CreateMap<Activity, OneActivityDto>();
         CreateMap<CreateActivityDto, Activity>();
+
+        CreateMap<ActivityTest, TestDto>();
     }
 }
