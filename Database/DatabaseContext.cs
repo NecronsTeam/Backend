@@ -11,6 +11,11 @@ public class DatabaseContext : DbContext
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Photo> Photos { get; set; }
 
+    public DbSet<ActivityTest> ActivityTests { get; set; }
+    public DbSet<Competence> Competences { get; set; }
+    public DbSet<StudentActivity> StudentActivities { get; set; }
+    public DbSet<StudentTestResult> StudentTestResults { get; set; }
+
     private IConfiguration Config { get; init; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config) : base(options)

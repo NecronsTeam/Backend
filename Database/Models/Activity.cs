@@ -9,6 +9,8 @@ public class Activity : BaseModel
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }
 
+    public string OrgChatLink { get; set; }
+
     [ForeignKey("CreatorUserId")]
     public virtual User CreatorUser { get; set; }
     public int CreatorUserId { get; set; }
@@ -18,4 +20,5 @@ public class Activity : BaseModel
     public int? PreviewPhotoId { get; set; }
 
     public virtual ICollection<Photo> Photos { get; set; } = [];
+    public virtual ICollection<Competence> Competences { get; set; } = [];
 }
