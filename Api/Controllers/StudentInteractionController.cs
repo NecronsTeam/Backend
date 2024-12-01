@@ -26,7 +26,8 @@ public class StudentInteractionController(
     }
 
     [HttpPost]
-    [Authorize(Roles = "Manager")]
+    //[Authorize(Roles = "Manager")]
+    [Route("add_student_test_result")]
     public async Task AddStudentTestResultAsync([FromBody] AddStudentTestResultDto resultDto)
     {
         var studentActivity = await studentInteractionRepository.GetStudentActivityAsync(resultDto.StudentUserId, resultDto.ActivityId) 
@@ -35,9 +36,19 @@ public class StudentInteractionController(
         var test = await activityRepository.GetActivityTestAsync(resultDto.ActivityId)
             ?? throw new BadHttpRequestException("У мероприятия нет теста");
 
+        if (resultDto.Score < 0)
+            throw new BadHttpRequestException("Результат теста не может быть меньше нуля");
+        if (resultDto.Score > test.MaxScore)
+            throw new BadHttpRequestException("Результат теста не может быть больше максимального количества баллов за тест");
+
+
+        var studentTestResultIfExists = await studentInteractionRepository.GetStudentTestResultAsync(studentActivity.Id);
+        if (studentTestResultIfExists is not null)
+            throw new BadHttpRequestException("У данного студента уже есть результат за этот тест");
+
         await studentInteractionRepository.AddStudentTestResultAsync(test.Id, studentActivity.Id, resultDto.Score);
 
-        await studentInteractionRepository.UpdateStudentActivityStatus(resultDto.ActivityId,
+        await studentInteractionRepository.UpdateStudentActivityStatus(studentActivity.Id,
             resultDto.IsStudentPassedTest ? ActivityStatus.PassedTest : ActivityStatus.Rejected);
     }
 }

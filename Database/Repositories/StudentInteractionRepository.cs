@@ -25,6 +25,11 @@ public class StudentInteractionRepository(DatabaseContext database, ActivityRepo
         return await database.StudentActivities.FirstOrDefaultAsync(sa => sa.UserId == userId && sa.ActivityId == activityid);
     }
 
+    public async Task<StudentTestResult?> GetStudentTestResultAsync(int studentActivityId)
+    {
+        return await database.StudentTestResults.FirstOrDefaultAsync(str => str.StudentActivityId == studentActivityId);
+    }
+
     public async Task AddStudentTestResultAsync(int testId, int studentActivityId, double score)
     {
         var studentTestResult = new StudentTestResult()

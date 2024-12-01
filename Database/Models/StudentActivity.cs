@@ -11,7 +11,7 @@ public class StudentActivity : BaseModel
     public int UserId { get; set; }
 
     [ForeignKey("ActivityId")]
-    public virtual User Activity { get; set; }
+    public virtual Activity Activity { get; set; }
     public int ActivityId { get; set; }
 
     public ActivityStatus Status { get; set; }
