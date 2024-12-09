@@ -75,4 +75,12 @@ public class ActivityController(IMapper mapper, ActivityRepository activityRepos
         var activityTest = await activityRepository.GetActivityTestAsync(activityId);
         return mapper.Map<TestDto?>(activityTest);
     }
+
+    [HttpGet]
+    [Route("chat/{activityId}")]
+    public async Task<string> GetActivityChatLinkAsync(int activityId)
+    {
+        var activityTest = await activityRepository.GetEntityByIdAsync(activityId);
+        return activityTest?.OrgChatLink ?? "";
+    }
 }

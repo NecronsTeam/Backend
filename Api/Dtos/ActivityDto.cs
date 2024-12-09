@@ -8,6 +8,7 @@ public record OneActivityDto(
     int Id,
     string Name,
     string Description,
+    string OrgChatLink,
     DateTime? DateFrom,
     DateTime? DateTo,
     int CreatorUserId,
@@ -17,6 +18,7 @@ public record OneActivityDto(
 public record CreateActivityDto(
     string Name,
     string Description,
+    string OrgChatLink,
     DateTime? DateFrom,
     DateTime? DateTo
 );

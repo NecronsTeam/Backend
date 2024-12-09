@@ -9,7 +9,7 @@ public class Activity : BaseModel
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }
 
-    public string OrgChatLink { get; set; }
+    public required string OrgChatLink { get; set; }
 
     [ForeignKey("CreatorUserId")]
     public virtual User CreatorUser { get; set; }
