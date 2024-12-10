@@ -16,6 +16,8 @@ public class DatabaseContext : DbContext
     public DbSet<StudentActivity> StudentActivities { get; set; }
     public DbSet<StudentTestResult> StudentTestResults { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
     private IConfiguration Config { get; init; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config) : base(options)

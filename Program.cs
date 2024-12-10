@@ -85,9 +85,13 @@ builder.Services.AddTransient<PasswordRepository>();
 builder.Services.AddTransient<AccountRepository>();
 builder.Services.AddTransient<ActivityRepository>();
 builder.Services.AddTransient<StudentInteractionRepository>();
+builder.Services.AddTransient<NotificationRepository>();
 
 builder.Services.AddTransient<PasswordHelperService>();
 builder.Services.AddTransient<EncryptionService>();
+
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql().UseLazyLoadingProxies());
 
@@ -111,6 +115,6 @@ app.UseCors(builder => builder
                             .AllowAnyHeader()
                             .AllowAnyMethod());
 
-
+app.MapHub<NotificationHub>("/notification");
 
 app.Run();

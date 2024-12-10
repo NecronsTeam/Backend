@@ -49,6 +49,7 @@ public class AuthController(IConfiguration _configuration, UserRepository userRe
         var claims = new List<Claim>
         {
             new(ClaimTypes.PrimarySid, user.Id.ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Email, user.Email),
         };
 
