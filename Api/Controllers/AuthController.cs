@@ -7,7 +7,6 @@ using CrmBackend.Database.Models;
 using CrmBackend.Database.Repositories;
 using CrmBackend.Api.Dtos;
 using CrmBackend.Api.Services;
-using CrmBackend.Database.Enums;
 
 namespace CrmBackend.Api.Controllers;
 
@@ -17,7 +16,7 @@ public class AuthController(IConfiguration _configuration, UserRepository userRe
 {
     [HttpPost]
     [Route("register")]
-    public async Task RegisterAsync(UserLoginDto dto)
+    public async Task RegisterAsync(UserRegisterDto dto)
     {
         var isEmailUsed = await userRepository.IsEmailAlreadyUsedAsync(dto.Email);
         if (isEmailUsed)
@@ -25,7 +24,7 @@ public class AuthController(IConfiguration _configuration, UserRepository userRe
 
         var hashOfPassword = await passwordService.AddHashedPasswordToDatabaseAsync(dto.Password);
 
-        var user = new User() { Email = dto.Email, HashedPassword = hashOfPassword, Roles = [RolesEnum.Student] };
+        var user = new User() { Email = dto.Email, HashedPassword = hashOfPassword, Roles = [dto.Role] };
         await userRepository.CreateEntityAsync(user);
     }
 

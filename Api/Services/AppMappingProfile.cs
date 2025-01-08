@@ -16,5 +16,7 @@ public class AppMappingProfile : Profile
         CreateMap<CreateActivityDto, Activity>();
 
         CreateMap<ActivityTest, TestDto>();
+
+        CreateMap<Competence, OneCompetenceDto>();
     }
 }
