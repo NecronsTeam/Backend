@@ -12,7 +12,8 @@ public record OneActivityDto(
     DateTime? DateFrom,
     DateTime? DateTo,
     int CreatorUserId,
-    int PreviewPhotoId
+    int PreviewPhotoId,
+    List<OneCompetenceDto> Competences
 );
 
 public record CreateActivityDto(
@@ -20,7 +21,8 @@ public record CreateActivityDto(
     string Description,
     string OrgChatLink,
     DateTime? DateFrom,
-    DateTime? DateTo
+    DateTime? DateTo,
+    List<int> CompetenciesIds
 );
 
 public record TestDto(

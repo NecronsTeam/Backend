@@ -13,7 +13,7 @@ namespace CrmBackend.Api.Controllers;
 [ApiController]
 [Route("activity")]
 [Authorize]
-public class ActivityController(IMapper mapper, ActivityRepository activityRepository, UserRepository userRepository) : Controller
+public class ActivityController(IMapper mapper, CompetenceRepository competenceRepository,  ActivityRepository activityRepository, UserRepository userRepository) : Controller
 {
     [HttpGet]
     public async Task<ListOfActivitiesDto> GetAllActivitiesAsync()
@@ -28,7 +28,6 @@ public class ActivityController(IMapper mapper, ActivityRepository activityRepos
     public async Task<OneActivityDto> GetOneActivityAsync([FromRoute] int id)
     {
         var activityFromDb = await activityRepository.GetEntityByIdAsync(id);
-
         return mapper.Map<OneActivityDto>(activityFromDb);
     }
 
@@ -39,20 +38,10 @@ public class ActivityController(IMapper mapper, ActivityRepository activityRepos
         var user = await HttpContext.User.GetUser(userRepository);
         var activityModel = mapper.Map<Activity>(createActivityDto);
         activityModel.CreatorUserId = user.Id;
+        activityModel.Competences = await competenceRepository.GetCompetenciesByTheirIds(createActivityDto.CompetenciesIds);
         //activityModel.PreviewPhoto = null;
 
         await activityRepository.CreateEntityAsync(activityModel);
-    }
-
-    [HttpGet]
-    [Route("owned")]
-    //[Authorize(Roles = "Manager")]
-    public async Task<ListOfActivitiesDto> GetCreatedByUserActivities()
-    {
-        var user = await HttpContext.User.GetUser(userRepository);
-        var activitiesFromDb = await activityRepository.GetCreatedByUserActivitiesAsync(user.Id);
-
-        return new ListOfActivitiesDto(activitiesFromDb.Select(mapper.Map<OneActivityDto>).ToList());
     }
 
     [HttpPost]

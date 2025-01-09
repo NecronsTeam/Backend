@@ -12,11 +12,11 @@ public class AppMappingProfile : Profile
         CreateMap<Account, OneAccountDto>();
         CreateMap<CreateAccountDto, Account>();
 
+        CreateMap<Competence, OneCompetenceDto>();
+
         CreateMap<Activity, OneActivityDto>();
         CreateMap<CreateActivityDto, Activity>();
 
         CreateMap<ActivityTest, TestDto>();
-
-        CreateMap<Competence, OneCompetenceDto>();
     }
 }
