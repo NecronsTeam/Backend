@@ -39,7 +39,7 @@ public class ActivityController(IMapper mapper, FilterService filterService, Com
 
     [HttpPost]
     //[Authorize(Roles = "Manager")]
-    public async Task CreateActivityAsync([FromBody] CreateActivityDto createActivityDto)
+    public async Task<OneActivityDto> CreateActivityAsync([FromBody] CreateActivityDto createActivityDto)
     {
         var user = await HttpContext.User.GetUser(userRepository);
         var activityModel = mapper.Map<Activity>(createActivityDto);
@@ -47,7 +47,9 @@ public class ActivityController(IMapper mapper, FilterService filterService, Com
         activityModel.Competences = await competenceRepository.GetCompetenciesByTheirIds(createActivityDto.CompetenciesIds);
         //activityModel.PreviewPhoto = null;
 
-        await activityRepository.CreateEntityAsync(activityModel);
+        var id = await activityRepository.CreateEntityAsync(activityModel);
+
+        return await GetOneActivityAsync(id);
     }
 
     [HttpPost]
