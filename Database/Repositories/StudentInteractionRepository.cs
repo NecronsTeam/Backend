@@ -20,6 +20,11 @@ public class StudentInteractionRepository(DatabaseContext database, ActivityRepo
         await database.SaveChangesAsync();
     }
 
+    public async Task<List<StudentActivity>> GetAllStudentActivitiesAsync(int userId)
+    {
+        return await database.StudentActivities.Where(sa => sa.UserId == userId).ToListAsync();
+    }
+
     public async Task<StudentActivity?> GetStudentActivityAsync(int userId, int activityid)
     {
         return await database.StudentActivities.FirstOrDefaultAsync(sa => sa.UserId == userId && sa.ActivityId == activityid);

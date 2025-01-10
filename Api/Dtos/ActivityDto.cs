@@ -1,4 +1,7 @@
-﻿namespace CrmBackend.Api.Dtos;
+﻿using CrmBackend.Database.Enums;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CrmBackend.Api.Dtos;
 
 public record ListOfActivitiesDto(
     List<OneActivityDto> Activities  
@@ -29,4 +32,12 @@ public record TestDto(
     int ActivityId,
     string Link,
     double MaxScore
+);
+
+public record ActivityFilterArgumentsDto(
+    string? Name,
+    List<int>? Competencies,
+    bool? Applied,
+    List<ActivityStatus>? Status,
+    bool? Owned
 );

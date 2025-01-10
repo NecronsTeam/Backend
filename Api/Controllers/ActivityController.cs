@@ -2,6 +2,7 @@
 
 using CrmBackend.Api.Dtos;
 using CrmBackend.Api.Helpers;
+using CrmBackend.Database.Enums;
 using CrmBackend.Database.Models;
 using CrmBackend.Database.Repositories;
 
@@ -16,7 +17,8 @@ namespace CrmBackend.Api.Controllers;
 public class ActivityController(IMapper mapper, CompetenceRepository competenceRepository,  ActivityRepository activityRepository, UserRepository userRepository) : Controller
 {
     [HttpGet]
-    public async Task<ListOfActivitiesDto> GetAllActivitiesAsync()
+    public async Task<ListOfActivitiesDto> GetAllActivitiesAsync
+        ([FromQuery] ActivityFilterArgumentsDto? filterArgumentsDto)
     {
         var activitiesFromDb = await activityRepository.GetAllEntitiesAsync();
 
