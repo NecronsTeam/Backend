@@ -6,3 +6,5 @@ public record AddStudentTestResultDto(
     double Score,
     bool IsStudentPassedTest
 );
+
+public record JoinChatDto(int ActivityId);

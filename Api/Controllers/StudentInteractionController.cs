@@ -51,4 +51,20 @@ public class StudentInteractionController(
         await studentInteractionRepository.UpdateStudentActivityStatus(studentActivity.Id,
             resultDto.IsStudentPassedTest ? ActivityStatus.PassedTest : ActivityStatus.Rejected);
     }
+
+    [HttpPost]
+    [Authorize(Roles = "Student")]
+    [Route("join_chat")]
+    public async Task JoinChatAsync([FromBody] JoinChatDto joinChatDto)
+    {
+        var user = await HttpContext.User.GetUser(userRepository);
+
+        var studentActivity = await studentInteractionRepository.GetStudentActivityAsync(user.Id, joinChatDto.ActivityId)
+           ?? throw new BadHttpRequestException("Данный студент не зарегистрирован на это мероприятие");
+
+        if (studentActivity.Status is not ActivityStatus.WaitingToJoinChat or ActivityStatus.PassedTest)
+            throw new BadHttpRequestException("У вас нет прав присоединиться к этому чату");
+
+        await studentInteractionRepository.UpdateStudentActivityStatus(studentActivity.Id, ActivityStatus.JoinedChat);
+    }
 }

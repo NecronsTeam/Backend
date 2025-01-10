@@ -38,6 +38,6 @@ public record ActivityFilterArgumentsDto(
     string? Name,
     List<int>? Competencies,
     bool? Applied,
-    List<ActivityStatus>? Status,
+    List<int>? Status,
     bool? Owned
 );

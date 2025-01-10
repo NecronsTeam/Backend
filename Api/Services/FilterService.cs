@@ -1,4 +1,5 @@
 ﻿using CrmBackend.Api.Dtos;
+using CrmBackend.Database.Enums;
 using CrmBackend.Database.Models;
 using CrmBackend.Database.Repositories;
 
@@ -32,7 +33,7 @@ public class FilterService(StudentInteractionRepository studentInteractionReposi
         if (filterArgs.Status?.Count > 0)
         {
             var studentActivities = await studentInteractionRepository.GetAllStudentActivitiesAsync(userId);
-            var filteredStudentActivities = studentActivities.Where(sa => filterArgs.Status.Contains(sa.Status));
+            var filteredStudentActivities = studentActivities.Where(sa => filterArgs.Status.Contains((int)sa.Status));
             activitiesList = activitiesList.Intersect(filteredStudentActivities.Select(sa => sa.Activity));
         }
 
