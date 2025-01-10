@@ -2,6 +2,7 @@
 
 using CrmBackend.Api.Dtos;
 using CrmBackend.Api.Helpers;
+using CrmBackend.Api.Services;
 using CrmBackend.Database.Enums;
 using CrmBackend.Database.Models;
 using CrmBackend.Database.Repositories;
@@ -14,15 +15,18 @@ namespace CrmBackend.Api.Controllers;
 [ApiController]
 [Route("activity")]
 [Authorize]
-public class ActivityController(IMapper mapper, CompetenceRepository competenceRepository,  ActivityRepository activityRepository, UserRepository userRepository) : Controller
+public class ActivityController(IMapper mapper, FilterService filterService, CompetenceRepository competenceRepository,  ActivityRepository activityRepository, UserRepository userRepository) : Controller
 {
     [HttpGet]
     public async Task<ListOfActivitiesDto> GetAllActivitiesAsync
         ([FromQuery] ActivityFilterArgumentsDto? filterArgumentsDto)
     {
-        var activitiesFromDb = await activityRepository.GetAllEntitiesAsync();
+        var activities = await activityRepository.GetAllEntitiesAsync();
 
-        return new ListOfActivitiesDto(activitiesFromDb.Select(mapper.Map<OneActivityDto>).ToList());
+        var user = await HttpContext.User.GetUser(userRepository);
+        activities = await filterService.FilterActivities(activities, filterArgumentsDto, user.Id);
+
+        return new ListOfActivitiesDto(activities.Select(mapper.Map<OneActivityDto>).ToList());
     }
 
     [HttpGet]

@@ -108,6 +108,7 @@ public static class RegisterServicesHelper
     {
         services.AddTransient<PasswordHelperService>();
         services.AddTransient<EncryptionService>();
+        services.AddTransient<FilterService>();
         //services.AddScoped<NotificationService>();
     }
 
