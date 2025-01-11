@@ -18,7 +18,7 @@ public class PhotoController(PhotoManager photoManager, PhotoRepository photoRep
             return Results.File(fileContents: await photoManager.GetDefaultPhotoAsync(), contentType: $"image/{Path.GetExtension(photoManager.DefaultPhotoName)}");
 
         var photoBytes = await photoManager.GetPhotoAsync(guid);
-
-        return Results.File(fileContents: photoBytes, contentType: $"image/{photoDbObject.Extension}");
+        var photoExtensionWithoutDot = photoDbObject.Extension[1..];
+        return Results.File(fileContents: photoBytes, contentType: $"image/{photoExtensionWithoutDot}", fileDownloadName: $"avatar.{photoExtensionWithoutDot}");
     }
 }

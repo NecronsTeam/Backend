@@ -12,7 +12,7 @@ public class OnlyPhotoAttribute : ValidationAttribute
         if (value is not IFormFile file)
             throw new BadHttpRequestException("Неправильный формат данных. Должен быть отправлен файл.");
 
-        var fileExtenstion = Path.GetExtension(file.Name);
+        var fileExtenstion = Path.GetExtension(file.FileName);
         if (!ValidFilesExtenstions.Contains(fileExtenstion))
             throw new BadHttpRequestException("Данный файл не является изображением.");
 

@@ -59,12 +59,12 @@ public class PhotoManager(PhotoRepository photoRepository, IConfiguration config
         using var photoFileStream = new FileStream(photoPath, FileMode.Open, FileAccess.Read);
 
         var photoBytes = new byte[photoFileStream.Length];
-        await photoFileStream.WriteAsync(photoBytes);
+        _ = await photoFileStream.ReadAsync(photoBytes);
 
         return photoBytes;
     }
 
-    public string GetLinkToPhotoByGuid(Guid guid) => Path.Combine(serverPathService.GetServerPath(), "photo", guid.ToString());
+    public string GetLinkToPhotoByGuid(Guid guid) => $"{serverPathService.GetServerPath()}/photo/{guid}";
 
     private string GetPathToPhotoByGuid(Guid photoGuid) => Path.Combine(PhotoDirectory, photoGuid.ToString());
 }
