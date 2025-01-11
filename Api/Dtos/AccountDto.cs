@@ -1,4 +1,5 @@
-﻿using CrmBackend.Database.Models;
+using CrmBackend.Database.Models;
+﻿using CrmBackend.Api.Helpers;
 
 namespace CrmBackend.Api.Dtos;
 
@@ -8,8 +9,10 @@ public record OneAccountDto(
     string LastName,
     string? MiddleName,
     string? PhoneNumber,
-    string? TelegramLink
+    string? TelegramLink,
+    string? AvatarLink
 );
+
 
 public record CreateAccountDto(
     string FirstName,
@@ -19,6 +22,7 @@ public record CreateAccountDto(
     string? TelegramLink
 );
 
+
 public record PatchAccountDto
 (
     string? FirstName,
@@ -27,3 +31,9 @@ public record PatchAccountDto
     string? PhoneNumber,
     string? TelegramLink
 ) : BasePatchDto<Account>;
+
+
+public record AttachAvatarDto(
+    [OnlyPhoto]
+    IFormFile Avatar
+);

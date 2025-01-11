@@ -96,6 +96,8 @@ public static class RegisterServicesHelper
             options.Filters.Add<CustomExceptionFilter>();
         });
 
+        services.AddHttpContextAccessor();
+
         //services.AddSignalR();
     }
 
@@ -109,6 +111,7 @@ public static class RegisterServicesHelper
         services.AddTransient<NotificationRepository>();
         services.AddTransient<CompetenceRepository>();
         services.AddTransient<ManagerRepository>();
+        services.AddTransient<PhotoRepository>();
     }
 
     private static void RegisterServices(this IServiceCollection services)
@@ -116,6 +119,8 @@ public static class RegisterServicesHelper
         services.AddTransient<PasswordHelperService>();
         services.AddTransient<EncryptionService>();
         services.AddTransient<FilterService>();
+        services.AddTransient<PhotoManager>();
+        services.AddTransient<ServerPathService>();
         //services.AddScoped<NotificationService>();
     }
 

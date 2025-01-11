@@ -1,4 +1,6 @@
-﻿namespace CrmBackend.Database.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CrmBackend.Database.Models;
 
 public class Account : BaseModel
 {
@@ -7,6 +9,10 @@ public class Account : BaseModel
     public string? MiddleName { get; set; }
     public string? PhoneNumber { get; set; }
     public string? TelegramLink { get; set; }
+
+    [ForeignKey("AvatarId")]
+    public virtual Photo? Avatar { get; set; }
+    public int? AvatarId { get; set; }
 
     public virtual User User { get; set; }
 }
