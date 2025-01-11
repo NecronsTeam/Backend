@@ -1,4 +1,6 @@
-﻿namespace CrmBackend.Api.Dtos;
+﻿using CrmBackend.Database.Models;
+
+namespace CrmBackend.Api.Dtos;
 
 public record OneAccountDto(
     int Id,
@@ -16,3 +18,12 @@ public record CreateAccountDto(
     string? PhoneNumber,
     string? TelegramLink
 );
+
+public record PatchAccountDto
+(
+    string? FirstName,
+    string? LastName,
+    string? MiddleName,
+    string? PhoneNumber,
+    string? TelegramLink
+) : BasePatchDto<Account>;

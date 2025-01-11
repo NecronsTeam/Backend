@@ -9,6 +9,6 @@ public interface IBaseRepository<T>
     public Task<List<T>> GetAllEntitiesAsync();
     public Task<T?> GetEntityByIdAsync(int id);
     public Task<int> CreateEntityAsync(T dto);
-    public Task UpdateEntityAsync(int id, BaseUpdateDto<T> updateDto);
+    public Task UpdateEntityAsync(int id, BasePatchDto<T> updateDto);
     public Task DeleteEntityByIdAsync(int id);
 }

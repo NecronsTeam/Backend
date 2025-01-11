@@ -47,13 +47,13 @@ public abstract class BaseRepository<T> : IBaseRepository<T>
         return await table.FindAsync(id);
     }
 
-    public virtual async Task UpdateEntityAsync(int id, BaseUpdateDto<T> updateDto)
+    public virtual async Task UpdateEntityAsync(int id, BasePatchDto<T> updateDto)
     {
         var entity = await GetEntityByIdAsync(id);
 
         if (entity is not null)
         {
-            updateDto.UpdateEntity(entity);
+            updateDto.ApplyPatch(entity);
             await _database.SaveChangesAsync();
         }
     }

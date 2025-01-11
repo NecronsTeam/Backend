@@ -43,4 +43,15 @@ public class AccountController(IMapper mapper, UserRepository userRepository, Ac
         var account = await accountRepository.GetEntityByIdAsync(id);
         return mapper.Map<OneAccountDto>(account);
     }
+
+    [HttpPatch]
+    public async Task<OneAccountDto> PatchAccountAsync([FromBody] PatchAccountDto patchAccountDto)
+    {
+        var user = await HttpContext.User.GetUser(userRepository);
+        if (user.Account is null)
+            throw new InvalidOperationException("У вас не создан аккаунт");
+
+        await accountRepository.UpdateEntityAsync(user.Account.Id, patchAccountDto);
+        return await GetOtherPersonAccount(user.Account.Id);
+    }
 }
