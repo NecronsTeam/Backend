@@ -17,7 +17,12 @@ public abstract record BasePatchDto<TModel>
             var value = property.GetValue(this);
 
             if (value is not null)
-                modelProperties.First(prop => prop.Name.ToLower() == property.Name.ToLower()).SetValue(objectFromDb, value);
+            {
+                var objectFromDbProperty = modelProperties.FirstOrDefault(prop => prop.Name.ToLower() == property.Name.ToLower());
+
+                if (objectFromDbProperty is not null)
+                    objectFromDbProperty.SetValue(objectFromDb, value);
+            }
         }
     }
 }

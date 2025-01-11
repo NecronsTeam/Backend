@@ -15,7 +15,11 @@ namespace CrmBackend.Api.Controllers;
 [ApiController]
 [Route("activity")]
 [Authorize]
-public class ActivityController(IMapper mapper, FilterService filterService, CompetenceRepository competenceRepository,  ActivityRepository activityRepository, UserRepository userRepository) : Controller
+public class ActivityController(IMapper mapper,
+                                FilterService filterService,
+                                CompetenceRepository competenceRepository,
+                                ActivityRepository activityRepository,
+                                UserRepository userRepository) : ControllerBase
 {
     [HttpGet]
     public async Task<ListOfActivitiesDto> GetAllActivitiesAsync
@@ -38,7 +42,7 @@ public class ActivityController(IMapper mapper, FilterService filterService, Com
     }
 
     [HttpPost]
-    //[Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager")]
     public async Task<OneActivityDto> CreateActivityAsync([FromBody] CreateActivityDto createActivityDto)
     {
         var user = await HttpContext.User.GetUser(userRepository);
@@ -48,6 +52,17 @@ public class ActivityController(IMapper mapper, FilterService filterService, Com
         //activityModel.PreviewPhoto = null;
 
         var id = await activityRepository.CreateEntityAsync(activityModel);
+
+        return await GetOneActivityAsync(id);
+    }
+
+    [HttpPatch]
+    [Authorize(Roles = "Manager")]
+    [Route("{id}")]
+    public async Task<OneActivityDto> PatchActivityAsync([FromRoute] int id, [FromBody] PatchActivityDto patchActivityDto)
+    {
+        await activityRepository.UpdateEntityAsync(id, patchActivityDto);
+        await activityRepository.UpdateActivityCompetences(id, patchActivityDto.CompetenciesIds);
 
         return await GetOneActivityAsync(id);
     }

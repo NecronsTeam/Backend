@@ -1,4 +1,6 @@
 ﻿using CrmBackend.Database.Enums;
+using CrmBackend.Database.Models;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrmBackend.Api.Dtos;
@@ -41,3 +43,12 @@ public record ActivityFilterArgumentsDto(
     List<int>? Status,
     bool? Owned
 );
+
+public record PatchActivityDto(
+    string? Name,
+    string? Description,
+    string? OrgChatLink,
+    DateTime? DateFrom,
+    DateTime? DateTo,
+    List<int>? CompetenciesIds
+) : BasePatchDto<Activity>;

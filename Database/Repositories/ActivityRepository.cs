@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrmBackend.Database.Repositories;
 
-public class ActivityRepository(DatabaseContext database) : BaseRepository<Activity>(database)
+public class ActivityRepository(DatabaseContext database, CompetenceRepository competenceRepository) : BaseRepository<Activity>(database)
 {
     public async Task<List<Activity>> GetCreatedByUserActivitiesAsync(int userId) 
         => await table.Where(act => act.CreatorUserId == userId).ToListAsync();
@@ -25,5 +25,21 @@ public class ActivityRepository(DatabaseContext database) : BaseRepository<Activ
     public async Task<ActivityTest?> GetActivityTestAsync(int activityId)
     {
         return await _database.ActivityTests.FirstOrDefaultAsync(at => at.ActivityId == activityId);
+    }
+
+    public async Task UpdateActivityCompetences(int activityId, List<int>? competenciesIds)
+    {
+        if (competenciesIds is null)
+            return;
+
+        var competencies = await competenceRepository.GetCompetenciesByTheirIds(competenciesIds);
+        var activity = await GetEntityByIdAsync(activityId) 
+            ?? throw new BadHttpRequestException("Нет мероприятия с таким id");
+
+        // Заменить компетенции
+        activity.Competences.Clear();
+        competencies.ForEach(activity.Competences.Add);
+
+        await _database.SaveChangesAsync();
     }
 }
