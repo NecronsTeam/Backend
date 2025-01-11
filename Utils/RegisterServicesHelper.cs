@@ -102,6 +102,7 @@ public static class RegisterServicesHelper
         services.AddTransient<StudentInteractionRepository>();
         services.AddTransient<NotificationRepository>();
         services.AddTransient<CompetenceRepository>();
+        services.AddTransient<ManagerRepository>();
     }
 
     private static void RegisterServices(this IServiceCollection services)

@@ -1,7 +1,11 @@
-﻿using CrmBackend.Api.Dtos;
+﻿using System.Xml.Linq;
+
+using CrmBackend.Api.Dtos;
 using CrmBackend.Database.Enums;
 using CrmBackend.Database.Models;
 using CrmBackend.Database.Repositories;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace CrmBackend.Api.Services;
 
@@ -43,5 +47,33 @@ public class FilterService(StudentInteractionRepository studentInteractionReposi
         }
 
         return activitiesList.ToList();
+    }
+
+    public List<AppliedStudentDto> FilterAppliedStudents(List<AppliedStudentDto> appliedStudents, List<int>? status, string? name)
+    {
+        var appliedStudentsCopied = appliedStudents.Select(appStud => appStud); // Copying list to not change source list
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            appliedStudentsCopied = appliedStudentsCopied.Where(appStud => IsSearchNameInFullName(appStud.FullName, name));
+        }
+
+        if (status?.Count > 0)
+        {
+            var filteredStudents = appliedStudentsCopied.Where(appStud => status.Contains((int)appStud.Status));
+            appliedStudentsCopied = appliedStudentsCopied.Intersect(filteredStudents);
+        }
+
+        return appliedStudentsCopied.ToList();
+    }
+
+    private static bool IsSearchNameInFullName(string fullName, string searchName)
+    {
+        var nameParts = fullName.Split(' ');
+
+        if (fullName.StartsWith(searchName))
+            return true;
+
+        return nameParts.Any(part => part.Contains(searchName));
     }
 }

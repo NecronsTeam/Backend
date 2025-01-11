@@ -22,6 +22,9 @@ public class StudentInteractionController(
     public async Task ApplyForActivityAsync([FromRoute] int activityId)
     {
         var user = await HttpContext.User.GetUser(userRepository);
+        if (user.Account is null)
+            throw new BadHttpRequestException("У пользователя не создан аккаунт для регистрации на мероприятие");
+
         await studentInteractionRepository.ApplyToActivityAsync(user.Id, activityId);
     }
 
