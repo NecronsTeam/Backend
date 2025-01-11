@@ -111,6 +111,7 @@ public static class RegisterServicesHelper
         services.AddTransient<NotificationRepository>();
         services.AddTransient<CompetenceRepository>();
         services.AddTransient<ManagerRepository>();
+        services.AddTransient<PhotoRepository>();
     }
 
     private static void RegisterServices(this IServiceCollection services)

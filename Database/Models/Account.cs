@@ -11,7 +11,7 @@ public class Account : BaseModel
     public string? TelegramLink { get; set; }
 
     [ForeignKey("AvatarId")]
-    public Photo? Avatar { get; set; }
+    public virtual Photo? Avatar { get; set; }
     public int? AvatarId { get; set; }
 
     public virtual User User { get; set; }
