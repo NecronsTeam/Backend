@@ -64,6 +64,8 @@ public class PhotoManager(PhotoRepository photoRepository, IConfiguration config
         return photoBytes;
     }
 
+    public async Task<string> GetLinkToPhotoByPhotoId(int photoId) => GetLinkToPhotoByGuid((await photoRepository.GetEntityByIdAsync(photoId)).Guid);
+
     public string GetLinkToPhotoByGuid(Guid guid) => $"{serverPathService.GetServerPath()}/photo/{guid}";
 
     private string GetPathToPhotoByGuid(Guid photoGuid) => Path.Combine(PhotoDirectory, photoGuid.ToString());

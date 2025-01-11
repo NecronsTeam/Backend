@@ -11,7 +11,7 @@ namespace CrmBackend.Api.Controllers;
 [ApiController]
 [Route("manager")]
 [Authorize(Roles = "Manager")]
-public class ManagerController(ManagerRepository managerRepository, FilterService filterService) : ControllerBase
+public class ManagerController(ManagerRepository managerRepository, FilterService filterService, PhotoManager photoManager) : ControllerBase
 {
     [HttpGet]
     [Route("applied_students/{activityId}")]
@@ -23,7 +23,7 @@ public class ManagerController(ManagerRepository managerRepository, FilterServic
         foreach (var apply in applies)
         {
             var studentAccount = apply.User.Account!;
-            var appliedStudent = new AppliedStudentDto(studentAccount.Id, GetStudentFullName(studentAccount), apply.Status, "avatar_link (wiil be later)");
+            var appliedStudent = new AppliedStudentDto(studentAccount.Id, GetStudentFullName(studentAccount), apply.Status, await photoManager.GetLinkToPhotoByPhotoId(studentAccount.AvatarId!.Value));
             appliedStudentsList.Add(appliedStudent);
         }
 
