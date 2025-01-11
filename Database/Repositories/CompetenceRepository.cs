@@ -9,7 +9,12 @@ public class CompetenceRepository(DatabaseContext database) : BaseRepository<Com
     public async Task<List<Competence>> GetCompetenciesWithFilterAsync(string? searchText) =>
         searchText is null
             ? await GetAllEntitiesAsync()
-            : await table.Where(competence => competence.Name.StartsWith(searchText)).ToListAsync();
+            : await table.Where(competence => competence.Name.ToLower().StartsWith(searchText.ToLower())).ToListAsync();
+
+    public async Task<bool> IsCompetenceWithNameAlreadyExists(string name)
+    {
+        return await table.AnyAsync(comp => comp.Name == name);
+    }
 
     public async Task<List<Competence>> GetCompetenciesByTheirIds(List<int> ids)
     {

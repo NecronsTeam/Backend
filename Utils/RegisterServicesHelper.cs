@@ -90,6 +90,12 @@ public static class RegisterServicesHelper
         services.AddSwaggerGen();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<CustomExceptionFilter>();
+        });
+
         //services.AddSignalR();
     }
 

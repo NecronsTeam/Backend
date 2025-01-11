@@ -8,4 +8,4 @@ builder.Services.RegisterAllServices(builder.Configuration);
 
 var app = builder.Build();
 app.RegisterMiddlewares();
-app.Run();
+await app.RunAsync();

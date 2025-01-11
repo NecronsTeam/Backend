@@ -24,6 +24,9 @@ public class CompetenceController(IMapper mapper, CompetenceRepository competenc
     [HttpPost]
     public async Task<OneCompetenceDto> CreateCompetence([FromBody] CreateCompetenceDto competenceDto)
     {
+        if (await competenceRepository.IsCompetenceWithNameAlreadyExists(competenceDto.Name))
+            throw new BadHttpRequestException("Компетенция с таким именем уже существует");
+
         var id = await competenceRepository.CreateEntityAsync(new Competence() { Name = competenceDto.Name });
         return new OneCompetenceDto(id, competenceDto.Name);
     }
