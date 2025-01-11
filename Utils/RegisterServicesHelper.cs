@@ -96,6 +96,8 @@ public static class RegisterServicesHelper
             options.Filters.Add<CustomExceptionFilter>();
         });
 
+        services.AddHttpContextAccessor();
+
         //services.AddSignalR();
     }
 
@@ -116,6 +118,8 @@ public static class RegisterServicesHelper
         services.AddTransient<PasswordHelperService>();
         services.AddTransient<EncryptionService>();
         services.AddTransient<FilterService>();
+        services.AddTransient<PhotoManager>();
+        services.AddTransient<ServerPathService>();
         //services.AddScoped<NotificationService>();
     }
 

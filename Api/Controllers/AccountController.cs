@@ -2,18 +2,20 @@
 
 using CrmBackend.Api.Dtos;
 using CrmBackend.Api.Helpers;
+using CrmBackend.Api.Services;
 using CrmBackend.Database.Models;
 using CrmBackend.Database.Repositories;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrmBackend.Api.Controllers;
 
 [ApiController]
 [Route("account")]
 [Authorize]
-public class AccountController(IMapper mapper, UserRepository userRepository, AccountRepository accountRepository) : Controller
+public class AccountController(IMapper mapper, UserRepository userRepository, AccountRepository accountRepository, PhotoManager photoManager) : ControllerBase
 {
     [HttpGet]
     public async Task<OneAccountDto> GetUserAccountAsync()
@@ -44,6 +46,7 @@ public class AccountController(IMapper mapper, UserRepository userRepository, Ac
         return mapper.Map<OneAccountDto>(account);
     }
 
+
     [HttpPatch]
     public async Task<OneAccountDto> PatchAccountAsync([FromBody] PatchAccountDto patchAccountDto)
     {
@@ -53,5 +56,17 @@ public class AccountController(IMapper mapper, UserRepository userRepository, Ac
 
         await accountRepository.UpdateEntityAsync(user.Account.Id, patchAccountDto);
         return await GetOtherPersonAccount(user.Account.Id);
+    }
+
+    [HttpPost]
+    [Route("avatar")]
+    public async Task<string> AttachAvatar([FromForm] AttachAvatarDto avatarDto)
+    {
+        var user = await HttpContext.User.GetUser(userRepository);
+        if (user.Account is null)
+            throw new InvalidOperationException("У пользователя не создан аккаунт");
+
+        var guid = await photoManager.UploadPhotoAsync(avatarDto.Avatar);
+        return photoManager.GetLinkToPhotoByGuid(guid);
     }
 }
