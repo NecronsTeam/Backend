@@ -30,6 +30,11 @@ public class StudentInteractionRepository(DatabaseContext database, ActivityRepo
         return await database.StudentActivities.FirstOrDefaultAsync(sa => sa.UserId == userId && sa.ActivityId == activityid);
     }
 
+    public async Task<StudentActivity?> GetStudentActivityAsync(int studentActivityId)
+    {
+        return await database.StudentActivities.FirstOrDefaultAsync(sa => sa.Id == studentActivityId);
+    }
+
     public async Task<StudentTestResult?> GetStudentTestResultAsync(int studentActivityId)
     {
         return await database.StudentTestResults.FirstOrDefaultAsync(str => str.StudentActivityId == studentActivityId);
@@ -37,6 +42,10 @@ public class StudentInteractionRepository(DatabaseContext database, ActivityRepo
 
     public async Task AddStudentTestResultAsync(int testId, int studentActivityId, double score)
     {
+        var studentActivity = await GetStudentActivityAsync(studentActivityId);
+        if (studentActivity is null)
+            throw new BadHttpRequestException("Данный пользователь не зарегистрирован на это мероприятие");
+
         var studentTestResult = new StudentTestResult()
         {
             ActivityTestId = testId,
@@ -45,6 +54,9 @@ public class StudentInteractionRepository(DatabaseContext database, ActivityRepo
         };
 
         await database.StudentTestResults.AddAsync(studentTestResult);
+
+        studentActivity.StudentTestResult = studentTestResult;
+
         await database.SaveChangesAsync();
     }
 

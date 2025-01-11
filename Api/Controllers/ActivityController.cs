@@ -62,7 +62,7 @@ public class ActivityController(IMapper mapper, FilterService filterService, Com
         if (addTestDto.MaxScore <= 0)
             throw new BadHttpRequestException("Максимальный балл теста не может быть меньше или равен нулю");
 
-        await activityRepository.AddTestToActivityAsync(addTestDto.ActivityId, addTestDto.Link, addTestDto.MaxScore);
+        await activityRepository.AddTestToActivityAsync(addTestDto.ActivityId, addTestDto.MaxScore, addTestDto.PassingScore);
     }
 
     [HttpGet]

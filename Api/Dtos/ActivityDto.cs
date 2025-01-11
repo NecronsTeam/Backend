@@ -30,8 +30,8 @@ public record CreateActivityDto(
 
 public record TestDto(
     int ActivityId,
-    string Link,
-    double MaxScore
+    double MaxScore,
+    double PassingScore
 );
 
 public record ActivityFilterArgumentsDto(

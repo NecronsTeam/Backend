@@ -3,8 +3,7 @@
 public record AddStudentTestResultDto(
     int StudentUserId,
     int ActivityId,
-    double Score,
-    bool IsStudentPassedTest
+    double Score
 );
 
 public record JoinChatDto(int ActivityId);

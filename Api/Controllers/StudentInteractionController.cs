@@ -48,8 +48,10 @@ public class StudentInteractionController(
 
         await studentInteractionRepository.AddStudentTestResultAsync(test.Id, studentActivity.Id, resultDto.Score);
 
+        var isStudentPassedTest = resultDto.Score >= test.PassingScore;
+
         await studentInteractionRepository.UpdateStudentActivityStatus(studentActivity.Id,
-            resultDto.IsStudentPassedTest ? ActivityStatus.PassedTest : ActivityStatus.Rejected);
+            isStudentPassedTest ? ActivityStatus.PassedTest : ActivityStatus.Rejected);
     }
 
     [HttpPost]
@@ -61,8 +63,8 @@ public class StudentInteractionController(
 
         var studentActivity = await studentInteractionRepository.GetStudentActivityAsync(user.Id, joinChatDto.ActivityId)
            ?? throw new BadHttpRequestException("Данный студент не зарегистрирован на это мероприятие");
-
-        if (studentActivity.Status is not ActivityStatus.WaitingToJoinChat or ActivityStatus.PassedTest)
+         
+        if (!(studentActivity.Status == ActivityStatus.WaitingToJoinChat || studentActivity.Status == ActivityStatus.PassedTest))
             throw new BadHttpRequestException("У вас нет прав присоединиться к этому чату");
 
         await studentInteractionRepository.UpdateStudentActivityStatus(studentActivity.Id, ActivityStatus.JoinedChat);
