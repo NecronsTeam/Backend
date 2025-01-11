@@ -1,4 +1,5 @@
-﻿using CrmBackend.Database.Enums;
+﻿using CrmBackend.Api.Helpers;
+using CrmBackend.Database.Enums;
 using CrmBackend.Database.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public record OneActivityDto(
     DateTime? DateFrom,
     DateTime? DateTo,
     int CreatorUserId,
-    int PreviewPhotoId,
+    string PreviewPhotoLink,
     List<OneCompetenceDto> Competences
 );
 
@@ -52,3 +53,8 @@ public record PatchActivityDto(
     DateTime? DateTo,
     List<int>? CompetenciesIds
 ) : BasePatchDto<Activity>;
+
+public record AttachActivityPreviewDto(
+    [OnlyPhoto]
+    IFormFile Preview
+);

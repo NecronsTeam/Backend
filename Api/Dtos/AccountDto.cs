@@ -9,7 +9,8 @@ public record OneAccountDto(
     string LastName,
     string? MiddleName,
     string? PhoneNumber,
-    string? TelegramLink
+    string? TelegramLink,
+    string? AvatarLink
 );
 
 

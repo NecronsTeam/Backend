@@ -42,4 +42,15 @@ public class ActivityRepository(DatabaseContext database, CompetenceRepository c
 
         await _database.SaveChangesAsync();
     }
+
+    public async Task AttachPreviewPhoto(int activityId, Photo preview)
+    {
+        var activity = await GetEntityByIdAsync(activityId);
+        if (activity is null)
+            throw new BadHttpRequestException("ЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫ");
+
+        activity.PreviewPhoto = preview;
+
+        await _database.SaveChangesAsync();
+    }
 }
