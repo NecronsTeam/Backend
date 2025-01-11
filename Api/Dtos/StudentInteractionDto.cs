@@ -1,4 +1,6 @@
-﻿namespace CrmBackend.Api.Dtos;
+﻿using CrmBackend.Database.Enums;
+
+namespace CrmBackend.Api.Dtos;
 
 public record AddStudentTestResultDto(
     int StudentUserId,
@@ -7,3 +9,5 @@ public record AddStudentTestResultDto(
 );
 
 public record JoinChatDto(int ActivityId);
+
+public record GetStudentApplyStatusDto(bool IsApplied, ActivityStatus? Status);

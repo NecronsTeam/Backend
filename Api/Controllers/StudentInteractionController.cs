@@ -14,7 +14,7 @@ namespace CrmBackend.Api.Controllers;
 public class StudentInteractionController(
     StudentInteractionRepository studentInteractionRepository,
     ActivityRepository activityRepository,
-    UserRepository userRepository) : Controller
+    UserRepository userRepository) : ControllerBase
 {
     [HttpPost]
     [Authorize(Roles = "Student")]
@@ -68,5 +68,18 @@ public class StudentInteractionController(
             throw new BadHttpRequestException("У вас нет прав присоединиться к этому чату");
 
         await studentInteractionRepository.UpdateStudentActivityStatus(studentActivity.Id, ActivityStatus.JoinedChat);
+    }
+
+    [HttpGet]
+    [Route("status/{activityId}")]
+    public async Task<GetStudentApplyStatusDto> GetStudentApplyStatusAsync([FromRoute] int activityId)
+    {
+        var user = await HttpContext.User.GetUser(userRepository);
+
+        var studentActivity = await studentInteractionRepository.GetStudentActivityAsync(user.Id, activityId);
+
+        return studentActivity is null
+            ? new GetStudentApplyStatusDto(false, null)
+            : new GetStudentApplyStatusDto(true, studentActivity.Status);
     }
 }
